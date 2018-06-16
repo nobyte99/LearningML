@@ -21,18 +21,48 @@ def plot_decision_boundary(model, axis):
     custom_cmap = ListedColormap([ '#EF9A9A', '#FFF59D', '#90CAF9' ])
     plt.contourf(x0, x1, zz, linewidth=5, cmap = custom_cmap)
          
+
+# 添加多项式项目  核函数， pipeline
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import PolynomialFeatures
+from sklearn.preprocessing import StandardScaler
+
+def PolynomialLogisticRegression(degree,C=1.0,penalty='l2'):
+    return Pipeline([
+        ('poly',PolynomialFeatures(degree=degree)),
+        ('std_scaler', StandardScaler()),
+        ('log_reg', LogisticRegression(C=C, penalty=penalty))
+    ])
+
+from sklearn.linear_model import Ridge
+def RidgeRegression(degree,alpha=1):
+    return Pipeline([
+        ('poly',PolynomialFeatures(degree=degree)),
+        ('std_scaler', StandardScaler()),
+        ('ridge_reg', Ridge(alpha=alpha))
+    ])
+
+from sklearn.linear_model import Lasso
+def LassoRegression(degree,alpha=1):
+    return Pipeline([
+        ('poly',PolynomialFeatures(degree=degree)),
+        ('std_scaler', StandardScaler()),
+        ('lasso_reg', Lasso(alpha=alpha))
+    ])
+
+
 if __name__ == '__main__':
     iris = datasets.load_iris()
-    X = iris.data[:, 2:]
-    y = iris.target
+    XXX = iris.data[:, 2:]
+    yyy = iris.target
     from sklearn.tree import DecisionTreeClassifier
 
     dt_clf = DecisionTreeClassifier(max_depth=2, criterion = "entropy")
-    dt_clf.fit(X,y)
+    dt_clf.fit(XXX,yyy)
     plot_decision_boundary(dt_clf, axis= [0.5, 7.5, 0,3])
 
-    plt.scatter(X[y==0,0], X[y==0,1])
-    plt.scatter(X[y==1,0], X[y==1,1])
-    plt.scatter(X[y==2,0], X[y==2,1])
+    plt.scatter(XXX[yyy==0,0], XXX[yyy==0,1])
+    plt.scatter(XXX[yyy==1,0], XXX[yyy==1,1])
+    plt.scatter(XXX[yyy==2,0], XXX[yyy==2,1])
     plt.show()
                                   
